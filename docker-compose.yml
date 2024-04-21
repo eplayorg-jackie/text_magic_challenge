@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  nginx:
+    ports:
+      - '8080:80'
+    build:
+      context: ./docker/nginx
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/sites/:/etc/nginx/sites-available
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d
+      - .:/var/www/app
+
+  app:
+    build:
+      context: ./docker/php-fpm
+    depends_on:
+      - database
+    volumes:
+      - .:/var/www/app
+    user: root
+
+  database:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-docker-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-docker-password}
+      POSTGRES_DB: ${POSTGRES_DB:-local-storage}
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

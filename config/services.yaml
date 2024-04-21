@@ -1,0 +1,45 @@
+parameters:
+
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Application\Entity\:
+        resource: '../src/Application/Entity/*'
+
+    Application\Exception\:
+        resource: '../src/Application/Exception/*'
+
+    Application\InternalProtocol\:
+        resource: '../src/Application/InternalProtocol/*'
+
+    Application\Listener\:
+        resource: '../src/Application/Listener/*'
+
+    Application\Provider\:
+        resource: '../src/Application/Provider/*'
+
+    Application\Repository\:
+        resource: '../src/Application/Repository/*'
+
+    Application\Service\:
+        resource: '../src/Application/Service/*'
+
+
+    # ----------- Data Fixtures ----------------
+
+    DataFixtures\:
+        resource: '../src/DataFixtures/*'
+
+
+    # ----------- Controllers ----------------
+
+    Http\ArgumentResolver\:
+        resource: '../src/Http/ArgumentResolver/*'
+
+    Http\Controller\:
+        resource: '../src/Http/Controller/*'
+        tags: ['controller.service_arguments']
