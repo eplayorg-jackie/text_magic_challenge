@@ -21,8 +21,6 @@ RUN apt-get update && apt-get install --assume-yes --quiet tzdata libmcrypt-dev 
         pkg-config        \
         git               \
         curl              \
-        nodejs            \
-        npm               \
         sed               \
         cron              \
         mcrypt            \
@@ -53,9 +51,9 @@ RUN apt-get update && apt-get install --assume-yes --quiet tzdata libmcrypt-dev 
         sed -i 's/max_execution_time=30/max_execution_time=180/g' $PHP_INI              && \
         sed -i "s/;date.timezone =.*/date.timezone = America\/New_York/g" $PHP_INI      && \
         sed -i 's/memory_limit=128M/memory_limit=512M/g' $PHP_INI                       && \
-# Composer install        
+# Composer install
         curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer    && \
-# Install PECL extensions        
+# Install PECL extensions
         pecl channel-update pecl.php.net                                                                        && \
         echo yes | pecl install mcrypt && echo 'extension=mcrypt.so' > $CONFD/docker-php-ext-mcrypt.ini	        && \
         echo "\n" | pecl install xdebug && docker-php-ext-enable xdebug                                         && \
@@ -66,4 +64,4 @@ RUN apt-get update && apt-get install --assume-yes --quiet tzdata libmcrypt-dev 
 EXPOSE 80
 EXPOSE 9000
 
-ENTRYPOINT "php-fpm"
+ENTRYPOINT ["php-fpm"]
